@@ -1,0 +1,3 @@
+url(relative_url) ::= "%relative_url%"
+dashboard_url() ::= "%url(/)%"
+profile_url(profile) ::= "/profiles/%profile.id%"

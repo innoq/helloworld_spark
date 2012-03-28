@@ -1,0 +1,64 @@
+delimiters "%", "%"
+
+import "routes.stg"
+
+stylesheet_link_tag(name) ::= <<
+<link href="/stylesheets/%name%.css" media="screen" rel="stylesheet" type="text/css" />
+
+>>
+
+
+header() ::= <<
+<div id="header">
+
+  <div id="logo">
+    <a href="%dashboard_url()%"><img alt="HelloWorld" src="/images/logo.png" /></a>
+  </div>
+>>
+
+footer() ::= <<
+<div id="footer">
+  <a href="#" title="">This is a sample application. Copyright 2010-2012 innoQ</a>
+</div>
+>>
+
+layout(body) ::= <<
+<html xmlns="http://www.w3.org/1999/xhtml" lang="de">
+
+  <head>
+
+    <title>Helloworld</title>
+
+    %["reset", "main", "dropdown"]:stylesheet_link_tag()%
+    <!-- override for IE-->
+
+    <!--[if IE 6]>
+	<style type="text/css" media="all">@import "/stylesheets/ie6.css";</style>
+  	<![endif]-->
+
+    <!--[if IE 7]>
+    <style type="text/css" media="all">@import "/stylesheets/ie7.css";</style>
+    <![endif]-->
+
+
+  </head>
+  <body>
+    <a name="tothetop"></a>
+    <div id="main">
+      %header()%
+
+      <div id="content-holder">
+
+        <div class="flash_messages">
+        </div>
+
+        %body%
+      </div>
+      <!-- /content-holder -->
+    </div>
+    <!-- /main -->
+
+    %footer()%
+  </body>
+</html>
+>>

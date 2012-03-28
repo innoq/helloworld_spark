@@ -1,57 +1,57 @@
 package com.innoq.helloworld.spark;
 
 import static spark.Spark.*;
+
 import spark.*;
-import org.antlr.stringtemplate.*;
-import org.antlr.stringtemplate.language.*;
- 
+
+import org.stringtemplate.v4.*;
+
 public class HelloWorld {
 
-   public static void main(String[] args) {
-       final StringTemplateGroup group = 
-	   new StringTemplateGroup("myGroup", "./src/main/resources/views",
-					 DefaultTemplateLexer.class);
-      
-      get(new Route("/info") {
-         @Override
-         public Object handle(Request request, Response response) {
-	     StringTemplate status = group.getInstanceOf("status");
-	     
-	     for (String header : request.headers()) {
-		 status.setAttribute("header", header);
-		 status.setAttribute(header, request.headers(header));
-	     } 	     
-	     response.type("text/html");
-	     return status.toString();
-         }
-      });
+    public static void main(String[] args) {
+        final STGroup layoutGroup =
+                new STGroupFile("./src/main/resources/views/layout.stg");
+        final ST layout = layoutGroup.getInstanceOf("layout");
 
-      get(new Route("/hello") {
-         @Override
-         public Object handle(Request request, Response response) {
-	     StringTemplate hello = new StringTemplate("Hello, $name$", DefaultTemplateLexer.class);
-	     hello.setAttribute("name", "World");
-	     return hello.toString();
-         }
-      });
 
-      get(new Route("/home") {
-         @Override
-         public Object handle(Request request, Response response) {
-	     StringTemplate helloAgain = group.getInstanceOf("homepage");
-	     
-	     helloAgain.setAttribute("title", "Welcome To StringTemplate");
-	     helloAgain.setAttribute("name", "World");
-	     helloAgain.setAttribute("friends", "Ter");
-	     helloAgain.setAttribute("friends", "Kunle");
-	     helloAgain.setAttribute("friends", "Micheal");
-	     helloAgain.setAttribute("friends", "Marq");
- 	     
-	     return helloAgain.toString();
-         }
-      });
+        get(new Route("/layout") {
+            @Override
+            public Object handle(Request request, Response response) {
+                return render(layout, "");
+            }
+        });
 
-      
-   }
+        before(new Filter() {
+            @Override
+            public void handle(Request request, Response response) {
+                layoutGroup.unload();
+            }
+        });
+
+
+        get(new Route("/info") {
+            @Override
+            public Object handle(Request request, Response response) {
+                ST status = layoutGroup.getInstanceOf("status");
+
+                for (String header : request.headers()) {
+                    status.add("header", header);
+                    status.add(header, request.headers(header));
+                }
+                response.type("text/html");
+                return status.toString();
+            }
+        });
+
+        get(new StaticFileRoute("/javascripts"));
+        get(new StaticFileRoute("/stylesheets"));
+        get(new StaticFileRoute("/images"));
+
+    }
+
+    private static String render(ST layout, String body) {
+        layout.add("body", body);
+        return layout.render();
+    }
 
 }
