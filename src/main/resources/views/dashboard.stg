@@ -1,0 +1,78 @@
+delimiters "%", "%"
+
+import "routes.stg"
+
+dashboard(profile, statuses, unaccepted_contacts, contacts_of_contacts) ::= <<
+
+<h1>Welcome,%profile.firstName%</h1>
+
+<div class="two-col-left">
+
+  <h2>My profile information</h2>
+
+  <div class="profile-center profile-in-dashboard">
+    <div>
+
+		<div class="profile-center-contact-image">
+			<img src="%profile.photoFileName%", alt="username" class="stream-image">
+		</div>
+
+      <div class="profile-center-contact-label">Name:</div>
+      <div class="profile-center-contact-data">%profile.firstName%%profile.lastName%</div>
+
+      <div class="profile-center-contact-label">Profession:</div>
+      <div class="profile-center-contact-data">%profile.profession%</div>
+
+      <div class="profile-center-contact-label">Company:</div>
+      <div class="profile-center-contact-data">%profile.company%</div>
+
+      <div class="profile-center-contact-label">Joined at:</div>
+      <div class="profile-center-contact-data">%profile.createdAt%</div>
+
+      <div class="profile-center-contact-label">Last profile update:</div>
+      <div class="profile-center-contact-data">%profile.updatedAt%</div>
+
+      <div class="clear"><!-- clear --></div>
+
+      <p>&nbsp;</p>
+
+      <p><a href="%profile_path(profile)%">Go to Public Profile</a> | <a href="%private_profile_path(profile)%">Go to Private Profile</a></p>
+
+     <%end%>
+  </div>
+
+  <h2>Stream of my contacts</h2>
+
+  <div class="stream">
+   %statuses:{status |
+      <div class="status">
+        <a href="%private_profile_url(status.profile)%">
+          <img src="%status.profile.photoFileName%" class="stream-image">
+        </a>
+        <div class="status-message">%status.message%</div>
+
+        <a href="%private_profile_url(status.profile)%" class="username" >%status.profile.firstName%%status.profile.lastName%</a>
+         <span class="status-date">%status.createdAt%</span>
+
+      </div>
+      <div class="clear"><!-- clear --></div>
+    }%
+  </div>
+
+
+</div>
+<!-- two-col-left -->
+
+<div class="two-col-right">
+
+  
+
+</div>
+<!-- two-col-right -->
+
+
+
+<div class="clear"><!-- clear --></div>
+
+
+>>
