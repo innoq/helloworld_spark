@@ -1,4 +1,4 @@
-package com.innoq.sparktest;
+package com.innoq.helloworld.spark;
 
 import static spark.Spark.*;
 import spark.*;
