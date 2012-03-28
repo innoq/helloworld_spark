@@ -38,7 +38,7 @@ dashboard(profile, statuses, unaccepted_contacts, contacts_of_contacts) ::= <<
 
       <p><a href="%profile_path(profile)%">Go to Public Profile</a> | <a href="%private_profile_path(profile)%">Go to Private Profile</a></p>
 
-     <%end%>
+     </div>
   </div>
 
   <h2>Stream of my contacts</h2>

@@ -75,11 +75,11 @@ public class HelloWorld {
     }
 
     private static Object render(ST layout, ST template) {
-        layout.add("body", template.render());
-        return layout.render();
+        return render(layout, template.render());
     }
 
     private static String render(ST layout, String body) {
+        layout.remove("body");
         layout.add("body", body);
         return layout.render();
     }

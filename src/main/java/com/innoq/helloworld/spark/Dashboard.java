@@ -4,6 +4,7 @@ import com.innoq.helloworld.models.Profile;
 import com.innoq.helloworld.models.Status;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
@@ -24,10 +25,13 @@ public class Dashboard {
             TypedQuery<Profile> query = em.createQuery("SELECT p FROM Profile p", Profile.class);
             query.setMaxResults(1);
             profile = query.getResultList().get(0);
-            statuses = profile.getStatuses();
-
-
             
+
+            Query nativeQuery = em.createNativeQuery("select distinct s.* from statuses s, relations r " +
+                    "where r.destination_id = ?1 and r.source_id = s.profile_id", Status.class);
+            nativeQuery.setParameter(1, profile.getId());
+
+            statuses = nativeQuery.getResultList();
 
         } finally {
             // Close the PersistenceManager:
